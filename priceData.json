@@ -1,0 +1,105 @@
+{
+    "latest": {
+        "timestamp": 1673598638502,
+        "newData": [
+            {
+                "symbol": "BTCUSDT",
+                "price": "18853.75000000"
+            },
+            {
+                "symbol": "ETHUSDT",
+                "price": "1409.82000000"
+            },
+            {
+                "symbol": "BNBUSDT",
+                "price": "288.20000000"
+            },
+            {
+                "symbol": "DOGEUSDT",
+                "price": "0.08031000"
+            }
+        ]
+    },
+    "ago": {
+        "five": {
+            "timestamp": 1673598559618,
+            "newData": [
+                {
+                    "symbol": "BTCUSDT",
+                    "price": "18850.18000000"
+                },
+                {
+                    "symbol": "ETHUSDT",
+                    "price": "1409.82000000"
+                },
+                {
+                    "symbol": "BNBUSDT",
+                    "price": "288.00000000"
+                },
+                {
+                    "symbol": "DOGEUSDT",
+                    "price": "0.08025000"
+                }
+            ]
+        },
+        "fifteen": {
+            "timestamp": 1673598503075,
+            "newData": [
+                {
+                    "symbol": "BTCUSDT",
+                    "price": "18840.11000000"
+                },
+                {
+                    "symbol": "ETHUSDT",
+                    "price": "1409.38000000"
+                },
+                {
+                    "symbol": "BNBUSDT",
+                    "price": "288.00000000"
+                },
+                {
+                    "symbol": "DOGEUSDT",
+                    "price": "0.08021000"
+                }
+            ]
+        },
+        "hour": {
+            "timestamp": 1673598600858,
+            "newData": [
+                {
+                    "symbol": "BTCUSDT",
+                    "price": "18850.48000000"
+                },
+                {
+                    "symbol": "ETHUSDT",
+                    "price": "1409.77000000"
+                },
+                {
+                    "symbol": "BNBUSDT",
+                    "price": "288.00000000"
+                },
+                {
+                    "symbol": "DOGEUSDT",
+                    "price": "0.08024000"
+                }
+            ]
+        },
+        "day": {
+            "timestamp": 1673421512421,
+            "newData": [
+                {
+                    "symbol": "BTCUSDT",
+                    "price": "17441.13000000"
+                },
+                {
+                    "symbol": "ETHUSDT",
+                    "price": "1334.08000000"
+                },
+                {
+                    "symbol": "BNBUSDT",
+                    "price": "277.10000000"
+                }
+            ]
+        }
+    }
+}
