@@ -402,7 +402,7 @@ async function timeBlockOpeate(a, b) {
         let arr = []
 
 
-        for (let i in newSymbol) {//循环遍历新币价
+        for (let i = 0; i < newSymbol.length; i++) {//循环遍历新币价
             if (nowTimeStamp - a.ago.five.timestamp >= 300000) {//如果五分钟了
                 a.ago.five = { timestamp: nowTimeStamp, newData: b }
                 writeDataAsync(a, './priceData.json');
@@ -416,7 +416,7 @@ async function timeBlockOpeate(a, b) {
                         res(arr);
                     }
                 } else {
-                    console.log(fiveAgoSymbol[i], '5分跌');
+                    console.log(fiveAgoSymbol[i], '5分跌', newPrice[i] - fiveAgoPrice[i]);
                     const diffNum = Math.abs(newPrice[i] - fiveAgoPrice[i]);
                     const percent = Math.round(diffNum / fiveAgoPrice[i] * 10000) / 100.00;
                     if (percent >= 0.2) {
@@ -425,9 +425,8 @@ async function timeBlockOpeate(a, b) {
                         res(arr);
                     }
                 }
-                res(arr);
             }
-            res(arr);
+
 
             if (nowTimeStamp - a.ago.fifteen.timestamp >= 900000) {//如果15分钟了
                 a.ago.fifteen = { timestamp: nowTimeStamp, newData: b }
@@ -451,8 +450,9 @@ async function timeBlockOpeate(a, b) {
                         res(arr);
                     }
                 }
-                res(arr);
             }
+
+
             if (nowTimeStamp - a.ago.hour.timestamp >= 3600000) {//如果60分钟了
                 a.ago.hour = { timestamp: nowTimeStamp, newData: b }
                 writeDataAsync(a, './priceData.json');
@@ -475,12 +475,10 @@ async function timeBlockOpeate(a, b) {
                         res(arr);
                     }
                 }
-                res(arr);
             }
-            res(arr);
+            res(arr)
         }
         res(arr);
-        return;
     })
 }
 

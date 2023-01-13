@@ -1,86 +1,86 @@
 {
     "latest": {
-        "timestamp": 1673598638502,
+        "timestamp": 1673602290685,
         "newData": [
             {
                 "symbol": "BTCUSDT",
-                "price": "18853.75000000"
+                "price": "18886.68000000"
             },
             {
                 "symbol": "ETHUSDT",
-                "price": "1409.82000000"
+                "price": "1411.53000000"
             },
             {
                 "symbol": "BNBUSDT",
-                "price": "288.20000000"
+                "price": "287.70000000"
             },
             {
                 "symbol": "DOGEUSDT",
-                "price": "0.08031000"
+                "price": "0.08046000"
             }
         ]
     },
     "ago": {
         "five": {
-            "timestamp": 1673598559618,
+            "timestamp": 1673602290686,
             "newData": [
                 {
                     "symbol": "BTCUSDT",
-                    "price": "18850.18000000"
+                    "price": "18886.68000000"
                 },
                 {
                     "symbol": "ETHUSDT",
-                    "price": "1409.82000000"
+                    "price": "1411.53000000"
                 },
                 {
                     "symbol": "BNBUSDT",
-                    "price": "288.00000000"
+                    "price": "287.70000000"
                 },
                 {
                     "symbol": "DOGEUSDT",
-                    "price": "0.08025000"
+                    "price": "0.08046000"
                 }
             ]
         },
         "fifteen": {
-            "timestamp": 1673598503075,
+            "timestamp": 1673601743017,
             "newData": [
                 {
                     "symbol": "BTCUSDT",
-                    "price": "18840.11000000"
+                    "price": "18894.78000000"
                 },
                 {
                     "symbol": "ETHUSDT",
-                    "price": "1409.38000000"
+                    "price": "1412.29000000"
                 },
                 {
                     "symbol": "BNBUSDT",
-                    "price": "288.00000000"
+                    "price": "287.80000000"
                 },
                 {
                     "symbol": "DOGEUSDT",
-                    "price": "0.08021000"
+                    "price": "0.08038000"
                 }
             ]
         },
         "hour": {
-            "timestamp": 1673598600858,
+            "timestamp": 1673602233679,
             "newData": [
                 {
                     "symbol": "BTCUSDT",
-                    "price": "18850.48000000"
+                    "price": "18877.17000000"
                 },
                 {
                     "symbol": "ETHUSDT",
-                    "price": "1409.77000000"
+                    "price": "1410.78000000"
                 },
                 {
                     "symbol": "BNBUSDT",
-                    "price": "288.00000000"
+                    "price": "287.40000000"
                 },
                 {
                     "symbol": "DOGEUSDT",
-                    "price": "0.08024000"
+                    "price": "0.08037000"
                 }
             ]
         },
