@@ -4,6 +4,7 @@ const fs = require('fs');
 const tencentcloud = require('tencentcloud-sdk-nodejs-tts');
 const { coinName } = require('./config');
 const TtsClient = tencentcloud.tts.v20190823.Client;
+const sound = require('play-sound')(opts = {})
 
 const clientConfig = {
     credential: {
@@ -21,19 +22,26 @@ const clientConfig = {
 
 
 async function sayCoinStatus(statusData) {
-    if (statusData.alert == 0) {//好像也没niao用
-        console.log('不用播报');
-        return;
+    // if (statusData.alert == 0) {//好像也没niao用
+    //     console.log('不用播报');
+    //     return;
+    // }
+    let content;
+    const name_zh = config.coinName.filter(item => { return item[0] == statusData.symbol });
+    if (name_zh.length !== 0) {
+        content = `${name_zh[0][1] + statusData.trend + statusData.price}刀,现报${statusData.nowPrice}`;
+    } else {
+        content = `${statusData.symbol + statusData.trend + statusData.price}刀,现报${statusData.nowPrice}`;
     }
 
-    const content = `${statusData.symbol + statusData.trend + statusData.price}刀,现报${statusData.nowPrice}`;
     const reqTime = Date.now().toString();
     console.log(content);
 
     const client = new TtsClient(clientConfig);
     const params = {
         "Text": content,
-        "SessionId": reqTime
+        "SessionId": reqTime,
+        "VoiceType": 1007
     };
     client.TextToVoice(params).then(
         (data) => {
@@ -43,6 +51,11 @@ async function sayCoinStatus(statusData) {
                     console.log(err)
                 }
             });
+            sound.play('audio.wav', (err) => {
+                if (err) {
+                    console.log(err)
+                }
+            })
         },
         (err) => {
             console.error("error", err);
@@ -486,7 +499,7 @@ async function followCoinAndSayStatus(statusArr) {
     const symbols = statusArr.map(item => item.symbol);
     if (symbols.indexOf(config.yourFollow[0]) !== -1) {
         const symbolIndex = symbols.indexOf(config.yourFollow[0]);
-        await sayCoinStatus(statusArr[statusArr[symbolIndex]]);
+        await sayCoinStatus(statusArr[symbolIndex]);
     } else {
         await sayCoinStatus(statusArr[0])
     }
