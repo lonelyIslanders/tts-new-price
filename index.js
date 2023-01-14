@@ -1,7 +1,8 @@
 const request = require('request');
 const config = require('./config');
 const fs = require('fs');
-const tencentcloud = require('tencentcloud-sdk-nodejs-tts')
+const tencentcloud = require('tencentcloud-sdk-nodejs-tts');
+const { coinName } = require('./config');
 const TtsClient = tencentcloud.tts.v20190823.Client;
 
 const clientConfig = {
@@ -20,14 +21,14 @@ const clientConfig = {
 
 
 async function sayCoinStatus(statusData) {
-    if (statusData.alert == 0) {
+    if (statusData.alert == 0) {//好像也没niao用
         console.log('不用播报');
         return;
     }
+
     const content = `${statusData.symbol + statusData.trend + statusData.price}刀,现报${statusData.nowPrice}`;
     const reqTime = Date.now().toString();
     console.log(content);
-    console.log(reqTime);
 
     const client = new TtsClient(clientConfig);
     const params = {
@@ -86,7 +87,7 @@ function readData() {
 function getPrice(coinArray) {
     return new Promise((res, rej) => {
         const options = {
-            url: `${url + JSON.stringify(coinArray)}`,
+            url: `${url + JSON.stringify(coinArray).toUpperCase()}`,
             timeout: 10000
         };
 
@@ -127,23 +128,21 @@ async function operate(a, b) {
             if (newPriceArr[i] - oldPriceArr[i] >= 0) {//新旧数据价格比较
                 const diffNum = Math.abs(newPriceArr[i] - oldPriceArr[i]);
                 const percent = Math.round(diffNum / oldPriceArr[i] * 10000) / 100.00;
-                if (percent > 0.15) {
+                if (percent >= 0.1) {
                     console.log(newSymbolArr[i], '暴涨啦');
-                    result = { alert: 1, symbol: newSymbolArr[i].replace('USDT', ''), trend: '上涨', price: diffNum < 1 ? Math.floor(diffNum * 1000) / 1000 : Math.floor(diffNum * 100) / 100, percent: '涨幅' + percent + '%', nowPrice: newPriceArr[i] < 1 ? Math.floor(newPriceArr[i] * 1000) / 1000 : Math.floor(newPriceArr[i] * 100) / 100 };
+                    result = { alert: 1, symbol: newSymbolArr[i].replace('USDT', ''), trend: '上涨', price: diffNum < 1 ? Math.floor(diffNum * 10000) / 10000 : Math.floor(diffNum * 100) / 100, percent: '涨幅' + percent + '%', nowPrice: newPriceArr[i] < 1 ? Math.floor(newPriceArr[i] * 10000) / 10000 : Math.floor(newPriceArr[i] * 100) / 100 };
                     arr.push(result);
                     res(arr);
                 } else {
                     console.log(newSymbolArr[i], "无剧烈波动");
-                    // result = { alert: 0 };
-                    // arr.push(result);
                     res(arr)
                 }
             } else {//币跌
                 const diffNum = Math.abs(newPriceArr[i] - oldPriceArr[i]);
                 const percent = Math.round(diffNum / oldPriceArr[i] * 10000) / 100.00;
-                if (percent > 0.15) {
+                if (percent > 0.1) {
                     console.log(newSymbolArr[i], '暴跌啦');
-                    result = { alert: 1, symbol: newSymbolArr[i].replace('USDT', ''), trend: '下跌', price: diffNum < 1 ? Math.floor(diffNum * 1000) / 1000 : Math.floor(diffNum * 100) / 100, percent: '跌幅' + percent + '%', nowPrice: newPriceArr[i] < 1 ? Math.floor(newPriceArr[i] * 1000) / 1000 : Math.floor(newPriceArr[i] * 100) / 100 };
+                    result = { alert: 1, symbol: newSymbolArr[i].replace('USDT', ''), trend: '下跌', price: diffNum < 1 ? Math.floor(diffNum * 10000) / 10000 : Math.floor(diffNum * 100) / 100, percent: '跌幅' + percent + '%', nowPrice: newPriceArr[i] < 1 ? Math.floor(newPriceArr[i] * 10000) / 10000 : Math.floor(newPriceArr[i] * 100) / 100 };
                     arr.push(result)
                     res(arr);
                 } else {
@@ -395,7 +394,7 @@ async function timeBlockOpeate(a, b) {
         const fifteenAgoPrice = a.ago.fifteen.newData.map(item => item.price);
         const hourAgoSymbol = a.ago.hour.newData.map(item => item.symbol);
         const hourAgoPrice = a.ago.hour.newData.map(item => item.price);
-        const newSymbol = b.map(item => item.price);
+        const newSymbol = b.map(item => item.symbol);
         const newPrice = b.map(item => item.price);
         const nowTimeStamp = Date.now();
         let result;
@@ -478,27 +477,47 @@ async function timeBlockOpeate(a, b) {
             }
             res(arr)
         }
-        res(arr);
+        // res(arr);
     })
 }
+
+
+async function followCoinAndSayStatus(statusArr) {
+    const symbols = statusArr.map(item => item.symbol);
+    if (symbols.indexOf(config.yourFollow[0]) !== -1) {
+        const symbolIndex = symbols.indexOf(config.yourFollow[0]);
+        await sayCoinStatus(statusArr[statusArr[symbolIndex]]);
+    } else {
+        await sayCoinStatus(statusArr[0])
+    }
+}
+
 
 
 (async () => {
     const oldData = await readData();//上次币价,priceData.json数据，首次就是666数据
 
-    const newData = await getPrice(config.coinArray);//最新币价[{"symbol": "BTCUSDT","price": "17448.37000000"}],
+    const newData = await getPrice(config.coinArray);//最新币价[{"symbol": "BTCUSDT","price": "60000"},{"symbol":"ETHUSDT","price":"4000"}],
 
     const re = await operate(oldData, newData);//只计算当前时间与上一次价格差异并更新最新价格
 
-    const res = await timeBlockOpeate(oldData, newData);//用于计算5、15、60分钟变化
+    const res = await timeBlockOpeate(oldData, newData);//用于计算5、15、60分钟变化并更新对应价格
 
-    // if (re.length == 0 && res.length == 0) {
-    //     return;
-    // }
+
+
+    if (re.length == 0 && res.length == 0) {
+        console.log("不必播报");
+        return;
+    }
 
     console.log(re)
     console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
     console.log(res)
-    // await sayCoinStatus(re);
+    if (re.length !== 0) {//有实时价格变动
+        await followCoinAndSayStatus(re)
+    }
+    if (res.length !== 0) {//有5、15、60价格变动
+        await followCoinAndSayStatus(res)
+    }
 })()
 
